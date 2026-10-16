@@ -1,26 +1,347 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@import "lenis/dist/lenis.css";
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Canvas & Surface Tokens */
+  --color-linen: #ECE8DF;
+  --color-linen-dark: #E4DFD5;
+  --color-linen-sub: #EDE7DE;
+  --color-canvas-cream: #F5EFEB;
+  --color-ink: #111111;
+  --color-ink-deep: #0D0D0D;
+  --color-dark-card: #141414;
+  --color-dark-tertiary: #1A1A1A;
+
+  /* Accent Tokens */
+  --color-accent-orange: #FF6332;
+  --color-accent-amber: #F5BF38;
+  --color-accent-cyan: #38BDF8;
+  --color-accent-royal: #2563EB;
+  --color-accent-mint: #A3E635;
+  --color-accent-pink: #EC4899;
+  --color-accent-emerald: #10B981;
+
+  /* Badge Tokens */
+  --color-badge-mint: #A2DCDB;
+  --color-badge-sand: #F0DC9B;
+  --color-badge-mustard: #E8C55C;
+  --color-badge-sage: #A4D8C2;
+  --color-badge-folder: #F6C343;
+
+  /* Font Families referencing Next.js Google Fonts */
+  --font-pixel: var(--font-pixel), "Pixelify Sans", "Silkscreen", monospace;
+  --font-hand: var(--font-hand), "Caveat", cursive;
+  --font-sans: var(--font-sans), "Plus Jakarta Sans", sans-serif;
+  --font-display: var(--font-display), "Anton", sans-serif;
+  --font-mono: var(--font-mono), "Space Mono", monospace;
+  --font-serif: var(--font-serif), "Instrument Serif", serif;
+
+  /* Shadows - Brutalist */
+  --shadow-retro-sm: 2px 2px 0px #000000;
+  --shadow-retro-md: 4px 4px 0px #000000;
+  --shadow-retro-lg: 6px 6px 0px #000000;
+  --shadow-card-floating: 0 20px 40px -15px rgba(0, 0, 0, 0.35);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ========================
+   BASE STYLES
+   ======================== */
+
+html {
+  scroll-behavior: auto; /* Lenis handles smooth scrolling */
+  scroll-padding-top: 5rem;
+}
+
+/* Fallback smooth scroll when Lenis is not yet active */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.lenis) {
+    scroll-behavior: smooth;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+html.lenis,
+html.lenis body {
+  height: auto;
 }
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+body {
+  background-color: #ECE8DF;
+  color: #111111;
+  font-family: var(--font-sans), "Plus Jakarta Sans", sans-serif;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: #FF6332;
+  color: white;
+}
+
+/* Typography Classes */
+.font-pixel {
+  font-family: var(--font-pixel), "Pixelify Sans", "Silkscreen", monospace;
+}
+.font-hand {
+  font-family: var(--font-hand), "Caveat", cursive;
+}
+.font-sans {
+  font-family: var(--font-sans), "Plus Jakarta Sans", sans-serif;
+}
+.font-display {
+  font-family: var(--font-display), "Anton", sans-serif;
+}
+.font-mono {
+  font-family: var(--font-mono), "Space Mono", monospace;
+}
+.font-serif {
+  font-family: var(--font-serif), "Instrument Serif", serif;
+}
+
+/* ========================
+   CUSTOM UTILITY CLASSES
+   ======================== */
+
+/* Hand-drawn organic border */
+.sketch-box {
+  border: 2px solid #FF6332;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+.sketch-box:hover {
+  transform: rotate(-0.5deg) scale(1.01);
+}
+
+/* Paper texture */
+.paper-texture {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Ruled paper lines */
+.ruled-paper,
+.ca-grid {
+  background-color: #ECE8DF;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 33px,
+    rgba(25, 21, 16, 0.08) 33px,
+    rgba(25, 21, 16, 0.08) 34px
+  );
+}
+
+.ca-doodle-box {
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.ca-display {
+  font-family: var(--font-display), "Anton", sans-serif;
+}
+
+.ca-hand {
+  font-family: var(--font-hand), "Caveat", cursive;
+}
+
+.ca-mono {
+  font-family: var(--font-mono), "Space Mono", monospace;
+}
+
+@keyframes ca-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.ca-spin-slow {
+  animation: 9s linear infinite ca-spin;
+}
+
+/* Inverted lens hover effect that tracks cursor */
+.ca-invert-lens {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  z-index: 30;
+  -webkit-backdrop-filter: invert(1);
+  backdrop-filter: invert(1);
+  will-change: transform, opacity;
+}
+
+
+/* Tag tilts */
+.tag-tilt-l {
+  transform: rotate(-2.5deg);
+}
+.tag-tilt-r {
+  transform: rotate(2deg);
+}
+
+/* Pixel text rendering crispness */
+.pixel-crisp {
+  image-rendering: pixelated;
+  letter-spacing: -0.04em;
+}
+
+/* Floating animation */
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+.float-slow {
+  animation: gentleFloat 5s ease-in-out infinite;
+}
+.float-slow-delay {
+  animation: gentleFloat 5.5s ease-in-out infinite 1.2s;
+}
+
+/* Brutalist card style */
+.brutalist-card {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  box-shadow: 2px 2px 0px #000000;
+  transition: all 0.15s ease;
+}
+.brutalist-card:hover {
+  box-shadow: 1px 1px 0px rgba(0, 0, 0, 0.15);
+  transform: translate(1px, 1px);
+}
+
+/* Folder Tab Clip */
+.folder-tab {
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 0 100%);
+}
+
+/* Masking tape strips */
+.tape-strip {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Timeline spine */
+.timeline-spine {
+  position: absolute;
+  left: 1.75rem;
+  top: 2.5rem;
+  bottom: 2.5rem;
+  width: 2px;
+  background: #262626;
+}
+
+@media (min-width: 640px) {
+  .timeline-spine {
+    left: 2rem;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0D0D0D;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* ========================
+   LOADING SCREEN
+   ======================== */
+
+.loading-overlay {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* ========================
+   RESPONSIVE — MOBILE-FIRST
+   ======================== */
+
+/* Extra Small (< 480px) */
+@media (max-width: 479px) {
+  /* Navbar */
+  header {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+  }
+
+  /* Hero section */
+  .ca-grid {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  /* Timeline spine positioning on very small screens */
+  .timeline-spine {
+    left: 0.75rem;
+  }
+}
+
+/* Small (480–639px) */
+@media (min-width: 480px) and (max-width: 639px) {
+  .timeline-spine {
+    left: 1.25rem;
+  }
+}
+
+/* Tablet portrait (640px–767px) */
+@media (min-width: 640px) and (max-width: 767px) {
+  .timeline-spine {
+    left: 1.5rem;
+  }
+}
+
+/* Tablet landscape & small laptops (768px–1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .timeline-spine {
+    left: 1.75rem;
+  }
+}
+
+/* Large screens & desktops (>= 1280px) */
+@media (min-width: 1280px) {
+  .timeline-spine {
+    left: 2.25rem;
+  }
+}
+
+/* Grigoletti Grain Texture Overlay */
+.noise-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('/images/noise.png');
+  background-repeat: repeat;
+  background-size: 180px 180px;
+  opacity: 0.055;
+  z-index: 1;
+}
+
+/* Suppress Next.js dev indicator / watermark badges */
+[data-nextjs-dev-indicator],
+[data-next-badge],
+nextjs-portal,
+#nextjs-dev-indicator {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+
+
